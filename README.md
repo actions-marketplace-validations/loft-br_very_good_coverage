@@ -30,10 +30,14 @@ A GitHub Action which helps enforce a minimum code coverage threshold.
 
 **Optional** List of paths to exclude from the coverage report, separated by an empty space. Supports `globs` to describe file patterns.
 
+### `changed_files`
+
+**Optional** List of paths of new/changed files, separated by an empty space. By using this the coverage will run only these files.
+
 ## Example usage
 
 ```yaml
-uses: VeryGoodOpenSource/very_good_coverage@v1
+uses: johnsouza-loftbr/very_good_coverage@v1.3.0
 with:
   path: './coverage/lcov.info'
   min_coverage: 95
