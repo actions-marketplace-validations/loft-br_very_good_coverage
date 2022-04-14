@@ -26,7 +26,7 @@ function run() {
     let totalFinds = 0;
     let totalHits = 0;
     data.forEach((element) => {
-      if (shouldCalculateCoverageForFile(element['file'], excludedFiles, changedFiles)) {
+      if (shouldCalculateCoverageForFile(element['file'], changedFiles, excludedFiles)) {
         totalFinds += element['lines']['found'];
         totalHits += element['lines']['hit'];
 
