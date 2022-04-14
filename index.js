@@ -7,7 +7,9 @@ function run() {
   const lcovPath = core.getInput('path');
   const minCoverage = core.getInput('min_coverage');
   const excluded = core.getInput('exclude');
+  const changed = core.getInput('changed_files');
   const excludedFiles = excluded.split(' ');
+  const changedFiles = changed.split(' ');
 
   if (!canParse(lcovPath)) {
     return;
@@ -24,7 +26,7 @@ function run() {
     let totalFinds = 0;
     let totalHits = 0;
     data.forEach((element) => {
-      if (shouldCalculateCoverageForFile(element['file'], excludedFiles)) {
+      if (shouldCalculateCoverageForFile(element['file'], excludedFiles, changedFiles)) {
         totalFinds += element['lines']['found'];
         totalHits += element['lines']['hit'];
 
@@ -59,7 +61,7 @@ function run() {
   });
 }
 
-function shouldCalculateCoverageForFile(fileName, excludedFiles) {
+function shouldCalculateCoverageForFile(fileName, changedFiles, excludedFiles) {
   for (let i = 0; i < excludedFiles.length; i++) {
     const isExcluded = minimatch(fileName, excludedFiles[i]);
     if (isExcluded) {
@@ -67,7 +69,17 @@ function shouldCalculateCoverageForFile(fileName, excludedFiles) {
       return false;
     }
   }
-  return true;
+  if (changedFiles !== null) {
+    for (let j = 0; j < changedFiles.length; j++) {
+      const isChanged = minimatch(fileName, changedFiles[j]);
+      if (isChanged) {
+        return true;
+      }
+      return false;
+    }
+  } else {
+    return true;
+  }
 }
 
 function canParse(path) {
