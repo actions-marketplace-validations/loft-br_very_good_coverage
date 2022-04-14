@@ -1,5 +1,5 @@
 {
-  "name": "very-good-coverage",
+  "name": "very-good-coverage-changed-files",
   "version": "1.3.0",
   "description": "A Github Action which helps enforce code coverage threshold using lcov",
   "main": "index.js",
