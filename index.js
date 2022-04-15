@@ -26,7 +26,13 @@ function run() {
     let totalFinds = 0;
     let totalHits = 0;
     data.forEach((element) => {
-      if (shouldCalculateCoverageForFile(element['file'], changedFiles, excludedFiles)) {
+      if (
+        shouldCalculateCoverageForFile(
+          element['file'],
+          changedFiles,
+          excludedFiles
+        )
+      ) {
         totalFinds += element['lines']['found'];
         totalHits += element['lines']['hit'];
 
@@ -62,6 +68,7 @@ function run() {
 }
 
 function shouldCalculateCoverageForFile(fileName, changedFiles, excludedFiles) {
+  const fileCleanName = fileName.split('/').pop();
   for (let i = 0; i < excludedFiles.length; i++) {
     const isExcluded = minimatch(fileName, excludedFiles[i]);
     if (isExcluded) {
@@ -71,12 +78,13 @@ function shouldCalculateCoverageForFile(fileName, changedFiles, excludedFiles) {
   }
   if (changedFiles !== null) {
     for (let j = 0; j < changedFiles.length; j++) {
-      const isChanged = minimatch(fileName, changedFiles[j]);
-      if (isChanged) {
+      const changedFileName = changedFiles[j].split('/').pop();
+      core.debug(`Checking ${fileCleanName} and ${changedFileName}`);
+      if (fileCleanName === changedFileName) {
         return true;
       }
-      return false;
     }
+    return false;
   } else {
     return true;
   }
